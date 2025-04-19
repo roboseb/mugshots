@@ -25,7 +25,7 @@ async function scrapeData(url) {
     } catch (err) {
         console.error(err);
     }
-}
+}``
 
 module.exports = {
     scrapeData: scrapeData
