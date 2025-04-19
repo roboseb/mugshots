@@ -1,0 +1,8 @@
+#images {
+    display: flex;
+    gap: 10px;
+}
+
+#images>img {
+    height:300px;
+}
