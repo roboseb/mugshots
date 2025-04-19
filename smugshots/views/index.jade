@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    #crime-card-container
+        - var x = 3;
+        - for (var i=1; i<=x; i++) {
+            div.crime-card
+                .card-image-slot 
+                    img(src=imgSource)
+                .card-crime-description Crime Description
+        - }
+
+
+
+    script(src='/javascripts/script.js')

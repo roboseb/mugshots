@@ -1,0 +1,65 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  height: 100vh;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#header {
+    background-color: aquamarine;
+    margin: 0;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#header>h1 {
+    margin: 0;
+}
+
+#content {
+    background-color: burlywood;
+    flex-grow: 1;
+}
+
+#crime-card-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: 100%;
+}
+
+.crime-card {
+    background-color: red;
+    flex-grow: 1;
+    height: 60%;
+    font-size: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 10px;
+    gap: 10px;
+}
+
+.card-image-slot {
+    background-color: green;
+    flex-grow: 2;
+}
+
+.card-image-slot>img {
+    width: 100%;
+}
+
+.card-crime-description {
+    background-color: rgb(163, 192, 97);
+    flex-grow: 1;
+}
+
+
