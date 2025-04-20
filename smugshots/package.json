@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon -e js,jade,json ./bin/www",
+    "dev": "nodemon -e js,jade,json,css ./bin/www --watch public --watch views --watch routes --watch app.js",
     "watch": "webpack --watch"
   },
   "dependencies": {

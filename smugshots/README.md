@@ -10,3 +10,7 @@ A game that takes data from mugshots.com and tasks you to guess which criminal c
 - Async function for getting random state then county
 - Async function for listing all criminals within county (page 1 for now)
 - Tattoo guessing mode
+- Add failsafe for criminals with no mugshot image (maybe based on alt attribute)
+
+
+charge name

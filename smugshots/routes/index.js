@@ -19,6 +19,8 @@ router.get('/', function (req, res, next) {
         res.render('index', { title: 'sadasd', imgSource: img });
     })
 
+    scrape.getCriminals()
+
 });
 
 module.exports = router;
