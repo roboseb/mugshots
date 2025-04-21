@@ -7,7 +7,7 @@ const fs = require("fs");
 const baseURL = "https://mugshots.com"
 
 // Async function for retrieving a list of criminals from a random county
-async function getCriminals() {
+async function getCriminals(amount) {
     try {
         // Fetch HTML of the page we want to scrape
         let { data } = await axios.get(baseURL + '/US-States');
@@ -18,11 +18,26 @@ async function getCriminals() {
 
         let random = Math.floor(Math.random() * states.length);
 
-        console.log(states.eq(random).attr('href'));
+        //console.log(states.eq(random).attr('href'));
 
         const stateURL = states.eq(random).attr('href');
 
         getCounty(stateURL)
+
+        const countyURL = await getCounty(stateURL);
+        const criminalList = await getCriminalList(countyURL, amount);
+        let criminalData = []
+
+        for (let i = 0; i < amount; i++) {
+            let data = await getCriminalData(criminalList[i]);
+            criminalData.push(data);
+
+            if (i == amount - 1) {
+                console.log('done with data', criminalData.length)
+                return criminalData;
+            }
+        }
+  
     } catch (err) {
         console.error(err);
     }
@@ -39,33 +54,45 @@ async function getCounty(stateURL) {
 
         let random = Math.floor(Math.random() * counties.length);
 
-        console.log(counties.eq(random).attr('href'));
+        //console.log(counties.eq(random).attr('href'));
 
         const countyURL = counties.eq(random).attr('href');
 
-        getCriminalList(countyURL)
+        return countyURL;
 
     } catch (err) {
         console.error(err);
     }
 }
 
-async function getCriminalList(countyURL) {
+async function getCriminalList(countyURL, amount) {
     try {
+
+        let criminalList = []
+
         // Fetch HTML of the page we want to scrape
-        let { data } = await axios.get("https://mugshots.com/US-States/Maine/Cumberland-County-ME/");
+        let { data } = await axios.get("https://mugshots.com/US-States/Minnesota/Lyon-County-MN/");
         // Load HTML we fetched in the previous line
         let $ = cheerio.load(data);
         // Select all the list items in plainlist class
         const criminals = $(".gallery-listing").find(".image-preview");
 
-        let random = Math.floor(Math.random() * criminals.length);
+        for (let i = 0; i < amount; i++) {
+            let random = Math.floor(Math.random() * criminals.length);
 
-        console.log(criminals.eq(random).attr('href'));
+            //console.log("http://mugshots.com" + criminals.eq(random).attr('href'));
 
-        const criminalURL = criminals.eq(random).attr('href');
+            while (criminals.eq(random).find(".image").find('img').length < 1) {
+                console.log("no image found")
+                random = Math.floor(Math.random() * criminals.length);
+            }
 
-        getCriminalData(criminalURL)
+            //console.log(criminals.eq(random).find(".image").find("img").length)
+
+            criminalList.push(criminals.eq(random).attr('href'));
+        }
+
+        return criminalList;
 
 
     } catch (err) {
@@ -80,50 +107,33 @@ async function getCriminalData(criminalURL) {
         // Load HTML we fetched in the previous line
         let $ = cheerio.load(data);
         // Select all the list items in plainlist class
-        const img = $("img.hidden-narrow");
-        console.log(img.attr('src'));
+        const img = $("img.hidden-narrow").attr('src');
+        //console.log(img);
 
-        const name = $(".category-breadcrumbs>span:last-child");
-        console.log(name.text());
+        const name = $(".category-breadcrumbs>span:last-child").text();
+        //console.log(name);
 
-        const crime = $("#Convictions").find("tr").eq(1).find("td");
-        console.log(crime.eq(0).text());
+        const crime = $("#Charges").find("tr").eq(1).find("td").eq(0).text();
+        //console.log(crime);
         //console.log(crime.eq(0).text())
 
 
-
+        const criminalData = createCriminal(img, name, crime);
+        return criminalData;
 
     } catch (err) {
         console.error(err);
     }
 }
 
-
-
-// Async function which scrapes the data
-async function scrapeData(url) {
-    try {
-        // Fetch HTML of the page we want to scrape
-        const { data } = await axios.get(url);
-        // Load HTML we fetched in the previous line
-        const $ = cheerio.load(data);
-        // Select all the list items in plainlist class
-        const listItems = $(".image-preview");
-        // Stores data for all countries
-        const mugshots = [];
-        // Use .each method to loop through the li we selected
-
-        const mugshot = $(".image-preview")
-
-        // console.log($(listItems).attr('href'))
-        // console.log($(listItems).find('img').attr('src'))
-        return $(listItems).find('img').attr('src')
-    } catch (err) {
-        console.error(err);
+const createCriminal = (img, name, crime) => {
+    return {
+        img: img,
+        name: name,
+        crime: crime
     }
 }
 
 module.exports = {
-    scrapeData: scrapeData,
     getCriminals: getCriminals
 }

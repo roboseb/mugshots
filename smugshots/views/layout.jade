@@ -3,6 +3,7 @@ html
     head
         title= title
         link(rel='stylesheet' href='/stylesheets/style.css')
+
     body
         #main-container 
             #header
@@ -10,5 +11,8 @@ html
             #content
                 block content
 
+        script(src='https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.js' type="text/javascript")
 
-        script(type='text/javascript' src='scrape.js')
+        script(src='/javascripts/script.js')
+        
+        

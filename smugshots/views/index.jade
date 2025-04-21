@@ -2,14 +2,20 @@ extends layout
 
 block content
     #crime-card-container
-        - var x = 3;
-        - for (var i=1; i<=x; i++) {
-            div.crime-card
+        - for (var i=0; i<data.length; i++) {
+            div.crime-card(data-crime=data[i].crime)
+                h3.card-name=data[i].name
                 .card-image-slot 
-                    img(src=imgSource)
-                .card-crime-description Crime Description
+                    .card-image-box
+                        img(src=data[i].img)
+                .card-description.draggable(class=`desc-slot${i}`)
+        - }
+
+
+    #crime-description-container.draggable(class=`desc-${i}`)
+        - for (var i=0; i<data.length; i++) {
+            .crime-description-card=data[i].crime
         - }
 
 
 
-    script(src='/javascripts/script.js')

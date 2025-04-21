@@ -11,15 +11,27 @@ router.get('/', function (req, res, next) {
 
 
 
-    scrape.scrapeData(url).then((img) => {
-        console.log(img)
-        // console.log('src is:' + imgSource)
-        console.log('router test')
+    scrape.getCriminals(3).then((data) => {
+        console.log(data)
 
-        res.render('index', { title: 'sadasd', imgSource: img });
+        res.render('index', { title: 'sadasd',
+                            data: data,});
     })
 
-    scrape.getCriminals()
+    // res.render('index', {
+    //     title: 'sadasd',
+    //     data: [
+    //         {
+    //         img: "./images/mugshot_1.jpg",
+    //         name: 'Alistair Crowley',
+    //         crime: "Loving too much."
+    //     },
+    //     {
+    //         img: "./images/mugshot_2.jpg",
+    //         name: 'Abigail Cummins',
+    //         crime: "Being a cow."
+    //     }]
+    // });
 
 });
 
