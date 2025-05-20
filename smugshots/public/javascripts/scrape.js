@@ -28,12 +28,15 @@ async function getCriminals(amount) {
         const criminalList = await getCriminalList(countyURL, amount);
         let criminalData = []
 
+        // Create an array with the desired amount of criminal data objects.
         for (let i = 0; i < amount; i++) {
             let data = await getCriminalData(criminalList[i]);
+
             criminalData.push(data);
+            
 
             if (i == amount - 1) {
-                console.log('done with data', criminalData.length)
+                //console.log('done with data', criminalData.length)
                 return criminalData;
             }
         }
@@ -71,7 +74,8 @@ async function getCriminalList(countyURL, amount) {
         let criminalList = []
 
         // Fetch HTML of the page we want to scrape
-        let { data } = await axios.get("https://mugshots.com/US-States/Minnesota/Lyon-County-MN/");
+        // This link will be replaced with the passed countyURL argument if fully random selection is implemented.
+        let { data } = await axios.get("https://mugshots.com/US-States/Alabama/DeKalb-County-AL/");
         // Load HTML we fetched in the previous line
         let $ = cheerio.load(data);
         // Select all the list items in plainlist class
@@ -80,7 +84,7 @@ async function getCriminalList(countyURL, amount) {
         for (let i = 0; i < amount; i++) {
             let random = Math.floor(Math.random() * criminals.length);
 
-            //console.log("http://mugshots.com" + criminals.eq(random).attr('href'));
+            console.log("http://mugshots.com" + criminals.eq(random).attr('href'));
 
             while (criminals.eq(random).find(".image").find('img').length < 1) {
                 console.log("no image found")
@@ -108,14 +112,39 @@ async function getCriminalData(criminalURL) {
         let $ = cheerio.load(data);
         // Select all the list items in plainlist class
         const img = $("img.hidden-narrow").attr('src');
-        //console.log(img);
 
         const name = $(".category-breadcrumbs>span:last-child").text();
-        //console.log(name);
 
-        const crime = $("#Charges").find("tr").eq(1).find("td").eq(0).text();
-        //console.log(crime);
-        //console.log(crime.eq(0).text())
+        const methods = {
+            0 : $("#Charges").find("tr").eq(1).find("td").eq(0).text(),
+            1 : $("span:contains('Offense')").next().text(),
+            2 : $("span:contains('Charges')").next().text(),
+            3 : $("#Offenses").find("tr").eq(0).find("td").text(),
+            4 : $("span:contains('Charges')").next().find("li").text(),
+            5 : $(".field>div:contains('Charges')").next().find("li").text(),
+        }
+
+        let crime;
+
+        // Iterate through all crime checking methods. Break if one works.
+        for  (let i = 0; i < Object.keys(methods).length; i++) {
+            crime = methods[i]
+
+            if (crime != '') {
+                console.log('Crime found!', crime, i);
+                break;
+            }
+        }
+
+        // Search for a new criminal if crime details are not present.
+
+        if (crime == "N/A") {
+            console.log('No crime data... Trying again.')
+            return null;
+        }
+
+        console.log(`Crime: ${crime}`)
+   
 
 
         const criminalData = createCriminal(img, name, crime);

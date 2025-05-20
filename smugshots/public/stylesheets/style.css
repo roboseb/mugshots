@@ -96,17 +96,31 @@ a {
     background-color: blanchedalmond;
     width: 100%;
     aspect-ratio: 1;
-    border-radius: 50px;
+    /* border-radius: 50px; */
     overflow: hidden;
+
+    position: relative;
 }
 
-.card-image-slot img {
-    /* width: 300px; */
-    /* display: none; */
+.card-image-box>img {
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.card-image-box>img.tall {
+    width: 100%;
+
+}
+
+.card-image-box>img.wide {
+    height: 100%
 }
 
 .card-description {

@@ -11,8 +11,8 @@ router.get('/', function (req, res, next) {
 
 
 
-    scrape.getCriminals(3).then((data) => {
-        console.log(data)
+    scrape.getCriminals(2).then((data) => {
+        // console.log(data)
 
         res.render('index', { title: 'sadasd',
                             data: data,});

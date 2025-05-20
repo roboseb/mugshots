@@ -1,7 +1,7 @@
 
 
 const refDesc = document.querySelector('.card-description').getBoundingClientRect();
-console.log(refDesc.width, refDesc.height)
+// console.log(refDesc.width, refDesc.height)
 
 
 
@@ -25,6 +25,8 @@ window.onload = () => {
 
         checkCards()
      });
+
+     resizeImages();
 
 }
 
@@ -52,6 +54,17 @@ const checkCards = (recent) => {
     if (descBox.children.length == 0) {
             console.log(correctAnswers);
     }
+}
+
+const resizeImages = () => {
+    const images = document.querySelectorAll('img');
+    images.forEach((img) => {
+        if (img.getBoundingClientRect().width > img.getBoundingClientRect().height) {
+            img.classList.add('wide');
+        } else {
+            img.classList.add('tall');
+        }
+    })
 }
 
 
